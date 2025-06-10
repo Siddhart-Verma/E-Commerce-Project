@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demand Forecasting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Welcome, {{ session['user'] }}!</h2>
+    <form action="/predict" method="post">
+        <label for="store_id">Store ID:</label>
+        <select name="store_id" required>
+            {% for id in store_ids %}
+                <option value="{{ id }}" {% if id == selected_store %}selected{% endif %}>{{ id }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="family">Item Family:</label>
+        <select name="family" required>
+            {% for fam in families %}
+                <option value="{{ fam }}" {% if fam == selected_family %}selected{% endif %}>{{ fam }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="date">Date:</label>
+        <input type="date" name="date" required value="{{ selected_date }}"><br>
+
+        <label for="onpromotion">On Promotion:</label>
+        <select name="onpromotion" required>
+            {% for val in onpromotion_values %}
+                <option value="{{ val }}" {% if val == selected_onpromotion %}selected{% endif %}>{{ val }}</option>
+            {% endfor %}
+        </select><br>
+
+        <input type="submit" value="Predict">
+    </form>
+
+    {% if prediction is defined %}
+        <h3>Prediction Result</h3>
+        <p><strong>Predicted Unit Sales:</strong> {{ prediction }}</p>
+        <p><strong>Store ID:</strong> {{ selected_store }}</p>
+        <p><strong>Item Family:</strong> {{ selected_family }}</p>
+        <p><strong>Date:</strong> {{ selected_date }}</p>
+        <p><strong>On Promotion:</strong> {{ selected_onpromotion }}</p>
+    {% endif %}
+
+    <br>
+    <a href="/logout">Logout</a>
+</body>
+</html>
+
